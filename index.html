@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Kinesis Method — Tushar Bhatia</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-deep: #085041;
+    --green-mid: #1D9E75;
+    --green-light: #E1F5EE;
+    --green-pale: #F4FBF8;
+    --purple-mid: #7F77DD;
+    --purple-light: #EEEDFE;
+    --amber-mid: #EF9F27;
+    --amber-light: #FAEEDA;
+    --text-dark: #1a1a18;
+    --text-mid: #4a4a45;
+    --text-light: #7a7a72;
+    --border: #e8e8e2;
+    --bg: #FAFAF8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-dark);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hero {
+    background: var(--green-deep);
+    padding: 72px 24px 64px;
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-line {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    max-width: 480px;
+    margin: 0 auto 32px;
+    line-height: 1.75;
+  }
+
+  .hero-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .author-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--green-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .author-info { text-align: left; }
+  .author-name { font-size: 14px; font-weight: 500; color: #fff; }
+  .author-title { font-size: 12px; color: rgba(255,255,255,0.55); }
+
+  .phase-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+  }
+
+  .phase-nav a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 16px 24px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .phase-nav a:hover { color: var(--green-deep); }
+  .phase-nav a.r:hover, .phase-nav a.r.active { border-color: var(--green-mid); color: var(--green-deep); }
+  .phase-nav a.rc:hover, .phase-nav a.rc.active { border-color: var(--purple-mid); color: #3C3489; }
+  .phase-nav a.rb:hover, .phase-nav a.rb.active { border-color: var(--amber-mid); color: #633806; }
+
+  .container { max-width: 700px; margin: 0 auto; padding: 0 24px; }
+
+  .intro-section {
+    padding: 64px 0 48px;
+    text-align: center;
+  }
+
+  .intro-section p {
+    font-size: 17px;
+    color: var(--text-mid);
+    line-height: 1.8;
+    max-width: 560px;
+    margin: 0 auto 20px;
+  }
+
+  .intro-section p:last-child { margin-bottom: 0; }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+
+  .flow-pill {
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 100px;
+  }
+
+  .flow-pill.r { background: var(--green-light); color: var(--green-deep); }
+  .flow-pill.rc { background: var(--purple-light); color: #3C3489; }
+  .flow-pill.rb { background: var(--amber-light); color: #633806; }
+  .flow-arrow { color: var(--text-light); font-size: 16px; }
+
+  .divider { height: 1px; background: var(--border); margin: 0; }
+
+  .phase-section { padding: 64px 0; }
+
+  .phase-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .phase-num-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .circle-r { background: var(--green-light); color: var(--green-deep); }
+  .circle-rc { background: var(--purple-light); color: #3C3489; }
+  .circle-rb { background: var(--amber-light); color: #633806; }
+
+  .phase-label-text {}
+  .phase-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .tag-r { color: var(--green-mid); }
+  .tag-rc { color: var(--purple-mid); }
+  .tag-rb { color: var(--amber-mid); }
+
+  .phase-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.1;
+  }
+
+  .phase-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--text-mid);
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+
+  .phase-body {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    margin-bottom: 32px;
+  }
+
+  .phase-body p { margin-bottom: 16px; }
+  .phase-body p:last-child { margin-bottom: 0; }
+
+  .tools-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 12px;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .tool-item {
+    font-size: 13px;
+    color: var(--text-mid);
+    padding: 9px 14px;
+    border-radius: 8px;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .tool-item::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .tool-r { background: var(--green-pale); }
+  .tool-r::before { background: var(--green-mid); }
+  .tool-rc { background: #F5F4FF; }
+  .tool-rc::before { background: var(--purple-mid); }
+  .tool-rb { background: #FEFAF3; }
+  .tool-rb::before { background: var(--amber-mid); }
+
+  .outcome-box {
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.75;
+    font-style: italic;
+  }
+
+  .outcome-r { border-left: 3px solid var(--green-mid); background: var(--green-light); color: var(--green-deep); }
+  .outcome-rc { border-left: 3px solid var(--purple-mid); background: var(--purple-light); color: #3C3489; }
+  .outcome-rb { border-left: 3px solid var(--amber-mid); background: var(--amber-light); color: #633806; }
+
+  .who-section {
+    padding: 64px 0;
+    background: #fff;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+  }
+
+  .section-sub {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 32px;
+  }
+
+  .who-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .who-item {
+    background: var(--green-pale);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .who-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green-mid);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .not-box {
+    background: #f9f9f7;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.75;
+  }
+
+  .not-box strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+
+  .cta-section {
+    padding: 72px 24px;
+    text-align: center;
+    background: var(--green-deep);
+  }
+
+  .cta-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.25;
+  }
+
+  .cta-section p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    max-width: 420px;
+    margin: 0 auto 32px;
+    line-height: 1.7;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 14px 32px;
+    background: #fff;
+    color: var(--green-deep);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .cta-btn:hover { opacity: 0.9; }
+
+  .footer {
+    padding: 32px 24px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+
+  .footer a {
+    color: var(--green-mid);
+    text-decoration: none;
+  }
+
+  @media (max-width: 560px) {
+    .tools-grid { grid-template-columns: 1fr; }
+    .who-grid { grid-template-columns: 1fr; }
+    .phase-nav a { padding: 14px 16px; font-size: 12px; }
+    .hero { padding: 56px 20px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-tag">Kinesis by Tushar</div>
+  <h1>The Kinesis Method</h1>
+  <p class="hero-line">A way of working with the whole person — mind, body, and emotion together — so that real, lasting change actually happens.</p>
+  <div class="hero-author">
+    <div class="author-dot">T</div>
+    <div class="author-info">
+      <div class="author-name">Tushar Bhatia</div>
+      <div class="author-title">Somatic Strength Coach · Delhi NCR & Online</div>
+    </div>
+  </div>
+</section>
+
+<nav class="phase-nav">
+  <a href="#intro">Overview</a>
+  <a href="#restore" class="r">Restore</a>
+  <a href="#reconnect" class="rc">Reconnect</a>
+  <a href="#rebuild" class="rb">Rebuild</a>
+  <a href="#who">Who it's for</a>
+</nav>
+
+<section id="intro" class="intro-section">
+  <div class="container">
+    <p>Most people arrive with a symptom — pain, low energy, poor sleep, stress, disconnection. These are real. But they are rarely the root.</p>
+    <p>The Kinesis Method works from the root outward. Not as a fitness programme. Not as therapy. As an integrated practice that treats the body, mind, and emotion as one system — because that is what they are.</p>
+
+    <div class="flow-row">
+      <span class="flow-pill r">Restore</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-pill rc">Reconnect</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-pill rb">Rebuild</span>
+    </div>
+
+    <p>Three phases. One direction. Built around your body — not a template.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="restore" class="phase-section">
+  <div class="container">
+    <div class="phase-label">
+      <div class="phase-num-circle circle-r">01</div>
+      <div class="phase-label-text">
+        <div class="phase-tag tag-r">Phase 1</div>
+        <div class="phase-name">Restore</div>
+      </div>
+    </div>
+
+    <div class="phase-subtitle">Before we build anything — we listen.</div>
+
+    <div class="phase-body">
+      <p>Most bodies that arrive at Kinesis are in a state of compensation. Pain, stiffness, chronic tension, shallow breath — or a nervous system that has been running on high alert for so long it no longer knows how to rest.</p>
+      <p>Emotions have no outlet. The mind is loud. The body has gone quiet.</p>
+      <p>In the Restore phase we do not push. We assess, release, and recalibrate. We work with what the body is holding — physically, emotionally, somatically — and create the conditions for real change.</p>
+    </div>
+
+    <div class="tools-label">What we work with</div>
+    <div class="tools-grid">
+      <div class="tool-item tool-r">Hands-on bodywork and manual therapy</div>
+      <div class="tool-item tool-r">Breathwork and nervous system regulation</div>
+      <div class="tool-item tool-r">Corrective movement and postural re-education</div>
+      <div class="tool-item tool-r">Somatic awareness practices</div>
+      <div class="tool-item tool-r">Thai massage and myofascial release</div>
+      <div class="tool-item tool-r">Energy work where appropriate</div>
+    </div>
+
+    <div class="outcome-box outcome-r">
+      Pain reduces. Breathing deepens. Sleep improves. The body begins to trust movement again. Many clients feel the most significant shift of their lives in these four weeks alone.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="reconnect" class="phase-section">
+  <div class="container">
+    <div class="phase-label">
+      <div class="phase-num-circle circle-rc">02</div>
+      <div class="phase-label-text">
+        <div class="phase-tag tag-rc">Phase 2</div>
+        <div class="phase-name">Reconnect</div>
+      </div>
+    </div>
+
+    <div class="phase-subtitle">You start to feel your body — not just manage it.</div>
+
+    <div class="phase-body">
+      <p>Most people live above the neck. They manage the body like a machine — push it when needed, ignore it otherwise. Emotion gets stored in tissue. Stress lives in the jaw, the hips, the shoulders. The mind runs ahead while the body falls behind.</p>
+      <p>The Reconnect phase is where the relationship between mind and body begins to change. Not as a concept — as a felt experience. You start to inhabit yourself more fully. Old patterns dissolve not because you force them out, but because your body no longer needs them.</p>
+    </div>
+
+    <div class="tools-label">What we work with</div>
+    <div class="tools-grid">
+      <div class="tool-item tool-rc">Functional movement training</div>
+      <div class="tool-item tool-rc">Animal flow and ground-based movement</div>
+      <div class="tool-item tool-rc">Somatic and emotional integration</div>
+      <div class="tool-item tool-rc">Mobility and flexibility progressions</div>
+      <div class="tool-item tool-rc">Movement pattern retraining</div>
+      <div class="tool-item tool-rc">Mindful strength introduction</div>
+    </div>
+
+    <div class="outcome-box outcome-rc">
+      You move with more ease and less effort. Energy becomes more consistent. The emotional weight in the body begins to shift. You start to feel — not just function.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="rebuild" class="phase-section">
+  <div class="container">
+    <div class="phase-label">
+      <div class="phase-num-circle circle-rb">03</div>
+      <div class="phase-label-text">
+        <div class="phase-tag tag-rb">Phase 3</div>
+        <div class="phase-name">Rebuild</div>
+      </div>
+    </div>
+
+    <div class="phase-subtitle">Now we build strength that actually holds.</div>
+
+    <div class="phase-body">
+      <p>Strength built on a dysregulated nervous system and dysfunctional movement patterns breaks down. Strength built on a body that moves well, breathes well, and feels well — that stays.</p>
+      <p>In the Rebuild phase we train. Progressively, intelligently, and always integrated with the somatic and emotional work that preceded it. Every session still includes breath, awareness, and movement quality alongside load and intensity. Nothing is ever siloed again.</p>
+    </div>
+
+    <div class="tools-label">What we work with</div>
+    <div class="tools-grid">
+      <div class="tool-item tool-rb">Kettlebell strength and conditioning</div>
+      <div class="tool-item tool-rb">Calisthenics and gymnastics skills</div>
+      <div class="tool-item tool-rb">Functional resistance training</div>
+      <div class="tool-item tool-rb">Martial arts and tactical conditioning</div>
+      <div class="tool-item tool-rb">Plyometrics and athletic development</div>
+      <div class="tool-item tool-rb">Long-term practice design</div>
+    </div>
+
+    <div class="outcome-box outcome-rb">
+      You become strong in a way that feels different — grounded, integrated, calm under pressure. Not just able to lift more. Able to move through your life with a confidence most people stop believing is possible.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="who" class="who-section">
+  <div class="container">
+    <div class="section-heading">Who this is for</div>
+    <div class="section-sub">You don't need to know exactly what's wrong. You just need to be ready to listen to what your body has been trying to tell you.</div>
+
+    <div class="who-grid">
+      <div class="who-item"><div class="who-dot"></div>People with chronic pain, fatigue, or stress that hasn't responded to conventional approaches</div>
+      <div class="who-item"><div class="who-dot"></div>Those who feel disconnected from themselves — numb, scattered, or emotionally heavy</div>
+      <div class="who-item"><div class="who-dot"></div>Professionals who want real strength without breaking themselves doing it</div>
+      <div class="who-item"><div class="who-dot"></div>Anyone who has tried the parts separately and is ready to work with the whole</div>
+    </div>
+
+    <div class="not-box">
+      <strong>This is not</strong>
+      A quick fix. A 30-day transformation. A workout plan you follow alone.<br><br>
+      It is a process of coming back to yourself — through the body. The timeline is yours. The direction is always the same.
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Not sure where you are in the journey?</h2>
+  <p>A free 30-minute Kinesis Assessment call is where we find out — together. No pitch. No pressure. Just clarity.</p>
+  <a href="https://wa.me/91XXXXXXXXXX?text=I'd%20like%20to%20book%20a%20free%20Kinesis%20assessment%20call" class="cta-btn">Book your free assessment call</a>
+</section>
+
+<footer class="footer">
+  <p>Tushar Bhatia · Somatic Strength Coach</p>
+  <p>Kinesis by Tushar · Fit by Tushar LLP</p>
+  <p><a href="https://kinesisbytushar.in">kinesisbytushar.in</a> · <a href="https://instagram.com/kinesisbytushar101">@kinesisbytushar101</a></p>
+</footer>
+
+<script>
+const navLinks = document.querySelectorAll('.phase-nav a');
+const sections = ['intro','restore','reconnect','rebuild','who'].map(id => document.getElementById(id));
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (s && window.scrollY >= s.offsetTop - 80) current = s.id; });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
