@@ -39,7 +39,7 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);-webk
 .section{padding:64px 24px}
 .section-alt{background:#fff}
 .container{max-width:720px;margin:0 auto}
-.section-tag{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green-mid);margin-bottom:8px}
+.section-tag{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--green-mid);margin-bottom:10px}
 .section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,36px);font-weight:500;color:var(--text);line-height:1.2;margin-bottom:16px}
 .section-sub{font-size:15px;color:var(--mid);line-height:1.75;margin-bottom:32px}
 
@@ -155,6 +155,36 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);-webk
   .hero{padding:56px 20px 48px}
   .section{padding:48px 20px}
 }
+
+.offer-card{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff;margin-bottom:12px;transition:box-shadow .2s}
+.offer-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.offer-card.featured{border:2px solid var(--green)}
+.offer-head{display:flex;align-items:center;gap:16px;padding:20px 24px;cursor:pointer;transition:background .2s}
+.offer-head:hover{background:var(--bg)}
+.offer-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.icon-amber{background:var(--amber-light)}
+.icon-green{background:var(--green-light)}
+.icon-purple{background:var(--purple-light)}
+.icon-soft{background:#f3f3f1}
+.offer-head-text{flex:1}
+.offer-badge-pill{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--green);color:#fff;padding:3px 10px;border-radius:20px;margin-bottom:5px}
+.offer-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--text);line-height:1.1;margin-bottom:3px}
+.offer-price-main{font-size:16px;font-weight:600;color:var(--green)}
+.offer-price-sub{font-size:11px;color:var(--soft);margin-top:1px}
+.offer-chevron{font-size:20px;color:var(--soft);transition:transform .3s;user-select:none;flex-shrink:0}
+.offer-chevron.open{transform:rotate(180deg)}
+.offer-body-toggle{display:none;padding:0 24px 24px;border-top:1px solid var(--border)}
+.offer-body-toggle.open{display:block}
+.offer-desc{font-size:14px;color:var(--mid);line-height:1.8;margin:18px 0 18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.inc-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-bottom:12px}
+.inc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.inc-row{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--mid);line-height:1.5}
+.inc-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.dot-amber{background:var(--amber)}
+.dot-green{background:var(--green-mid)}
+.dot-purple{background:var(--purple)}
+.dot-soft{background:#bbb}
+@media(max-width:600px){.inc-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -344,83 +374,113 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);-webk
     <div class="section-h">Choose how we begin.</div>
     <div class="section-sub">Every offering is built around the Kinesis Method. The format changes — the depth doesn't.</div>
 
-    <!-- TOP TWO CARDS -->
-    <div class="prog-grid">
-
-      <div class="prog-card">
-        <div class="prog-top">
-          <div class="prog-name">Online Coaching</div>
-          <div class="prog-price">₹15,000 <span style="font-size:13px;font-weight:400;color:var(--soft)">/month</span></div>
-          <div class="prog-price-note">3-month minimum · fully remote</div>
+    <!-- RESTORE SESSION -->
+    <div class="offer-card">
+      <div class="offer-head" onclick="toggleProg(this)">
+        <div class="offer-icon icon-amber">🤲</div>
+        <div class="offer-head-text">
+          <div class="offer-title">Restore Session</div>
+          <div class="offer-price-main">₹6,000</div>
+          <div class="offer-price-sub">120 min · in-person · Delhi NCR · groups — I travel to you</div>
         </div>
-        <div class="prog-body">
-          <div class="prog-line">Custom programme updated every 4 weeks</div>
-          <div class="prog-line">2–4 coaching sessions per month — frequency based on your needs and availability</div>
-          <div class="prog-line">Video form review and feedback</div>
-          <div class="prog-line">WhatsApp support between sessions</div>
-          <div class="prog-line">Breathwork and somatic practice guidance</div>
-          <div class="prog-line">Nutrition and lifestyle support</div>
-          <div class="prog-line">Available anywhere in the world</div>
-        </div>
+        <div class="offer-chevron">&#8964;</div>
       </div>
-
-      <div class="prog-card featured">
-        <div class="prog-badge">Flagship</div>
-        <div class="prog-top">
-          <div class="prog-name">Kinesis Method Coaching</div>
-          <div class="prog-price">₹27,000 <span style="font-size:13px;font-weight:400;color:var(--soft)">/month</span></div>
-          <div class="prog-price-note">3–6 month commitment · hybrid · limited spots</div>
+      <div class="offer-body-toggle">
+        <div class="offer-desc">
+          The starting point for most people. A full movement and postural assessment followed by a bodywork session — a hands-on therapeutic experience drawing from energy work, marma point therapy, Thai massage, yoga-based touch, and soft tissue release. You leave with a clear picture of what your body has been holding — and what to do next.<br><br>
+          <span style="color:var(--green);font-weight:500">Available for groups too —</span> if you have a team, a community, or a group of people who want to experience this together, I travel to your location.
         </div>
-        <div class="prog-body">
-          <div class="prog-line">Full online coaching included</div>
-          <div class="prog-line">In-person and virtual sessions — frequency based on your goals and schedule</div>
-          <div class="prog-line">Bodywork — hands-on therapy using touch, breath, and movement to release what the body holds</div>
-          <div class="prog-line">Somatic and emotional integration work</div>
-          <div class="prog-line">Nutrition and lifestyle guidance tailored to your life</div>
-          <div class="prog-line">WhatsApp support between sessions</div>
-          <div class="prog-line">Limited spots — small group at any time</div>
+        <div class="inc-label">What's included</div>
+        <div class="inc-grid">
+          <div class="inc-row"><div class="inc-dot dot-amber"></div>Full movement and postural assessment</div>
+          <div class="inc-row"><div class="inc-dot dot-amber"></div>Bodywork — energy work, marma, Thai massage, touch healing, soft tissue release</div>
+          <div class="inc-row"><div class="inc-dot dot-amber"></div>Breathwork and nervous system observation</div>
+          <div class="inc-row"><div class="inc-dot dot-amber"></div>Personalised direction and next-step guidance</div>
         </div>
-      </div>
-
-    </div>
-
-    <!-- BOTTOM TWO CARDS -->
-    <div class="prog-card-full" style="margin-bottom:16px">
-      <div class="prog-full-top">
-        <div class="prog-full-col">
-          <div class="prog-full-name">🤲 &nbsp;Restore Session</div>
-          <div class="prog-full-price">₹6,000</div>
-          <div class="prog-full-note">120 min · in-person · Delhi NCR</div>
-        </div>
-        <div class="prog-full-col">
-          <div style="font-size:14px;color:var(--mid);line-height:1.7">The starting point for most people. A full movement and postural assessment followed by a bodywork session — a hands-on therapeutic experience drawing from energy work, marma point therapy, Thai massage, yoga-based touch, and soft tissue release. You leave with a clear picture of what your body has been holding — and what to do next.<br><br>
-          <span style="color:var(--green);font-weight:500">Available for groups too —</span> if you have a team, a community, or a group of people who want to experience this together, I travel to your location.</div>
-        </div>
-      </div>
-      <div class="prog-full-body">
-        <div class="prog-line" style="font-size:13px;color:var(--mid)">Full movement and postural assessment</div>
-        <div class="prog-line" style="font-size:13px;color:var(--mid)">Bodywork — energy work, marma, Thai massage, touch healing, soft tissue release</div>
-        <div class="prog-line" style="font-size:13px;color:var(--mid)">Breathwork and nervous system observation</div>
-        <div class="prog-line" style="font-size:13px;color:var(--mid)">Personalised direction and next-step guidance</div>
       </div>
     </div>
 
-    <div class="prog-card-full">
-      <div class="prog-full-top">
-        <div class="prog-full-col">
-          <div class="prog-full-name">🎖️ &nbsp;Workshops &amp; Institutions</div>
-          <div class="prog-full-price">On enquiry</div>
-          <div class="prog-full-note">Groups · corporates · tactical units</div>
+    <!-- ONLINE COACHING -->
+    <div class="offer-card">
+      <div class="offer-head" onclick="toggleProg(this)">
+        <div class="offer-icon icon-green">🌐</div>
+        <div class="offer-head-text">
+          <div class="offer-title">Online Coaching</div>
+          <div class="offer-price-main">₹15,000 <span style="font-size:13px;font-weight:400;color:var(--soft)">/month</span></div>
+          <div class="offer-price-sub">3-month minimum · fully remote · anywhere in the world</div>
         </div>
-        <div class="prog-full-col">
-          <div style="font-size:14px;color:var(--mid);line-height:1.7">13+ years of training people across movement, strength, bodywork, and somatic practice — including India's elite units NSG, ITBP, Para 17, and Haryana Police SWAT. Now available as structured workshops and training programmes for groups, corporates, and institutions.</div>
+        <div class="offer-chevron">&#8964;</div>
+      </div>
+      <div class="offer-body-toggle">
+        <div class="offer-desc">
+          For people who are ready for real, structured coaching — wherever they are. Built entirely around your schedule, your body, and your life. Not a generic plan. A living, evolving programme that changes as you do.
+        </div>
+        <div class="inc-label">What's included</div>
+        <div class="inc-grid">
+          <div class="inc-row"><div class="inc-dot dot-green"></div>2–4 coaching sessions per month — based on your needs and availability</div>
+          <div class="inc-row"><div class="inc-dot dot-green"></div>Custom programme redesigned every 4 weeks</div>
+          <div class="inc-row"><div class="inc-dot dot-green"></div>Video form review and movement feedback</div>
+          <div class="inc-row"><div class="inc-dot dot-green"></div>Breathwork and somatic practice guidance</div>
+          <div class="inc-row"><div class="inc-dot dot-green"></div>Nutrition and lifestyle support</div>
+          <div class="inc-row"><div class="inc-dot dot-green"></div>WhatsApp support between sessions</div>
         </div>
       </div>
-      <div class="prog-full-body">
-        <div class="prog-line" style="font-size:13px;color:var(--mid)">Half-day and full-day workshops — movement, bodywork, somatic practice</div>
-        <div class="prog-line" style="font-size:13px;color:var(--mid)">Strength and conditioning training for tactical and paramilitary units</div>
-        <div class="prog-line" style="font-size:13px;color:var(--mid)">Corporate wellness programmes</div>
-        <div class="prog-line" style="font-size:13px;color:var(--mid)">1-on-1 coaching and mentorship for practitioners</div>
+    </div>
+
+    <!-- KINESIS METHOD FLAGSHIP -->
+    <div class="offer-card featured">
+      <div class="offer-head" onclick="toggleProg(this)">
+        <div class="offer-icon icon-purple">⚡</div>
+        <div class="offer-head-text">
+          <div class="offer-badge-pill">Flagship</div>
+          <div class="offer-title">Kinesis Method Coaching</div>
+          <div class="offer-price-main">₹29,000 <span style="font-size:13px;font-weight:400;color:var(--soft)">/month</span></div>
+          <div class="offer-price-sub">3–6 month commitment · hybrid (in-person + virtual) · limited spots</div>
+        </div>
+        <div class="offer-chevron">&#8964;</div>
+      </div>
+      <div class="offer-body-toggle open">
+        <div class="offer-desc">
+          The full experience. Online coaching integrated with in-person sessions — where the deeper work happens. Bodywork is at the heart of this programme: a hands-on therapeutic practice drawing from energy work, marma, Thai massage, and soft tissue release. It reaches what movement alone cannot. For people who are ready to go all the way in.
+        </div>
+        <div class="inc-label">What's included</div>
+        <div class="inc-grid">
+          <div class="inc-row"><div class="inc-dot dot-purple"></div>Everything in Online Coaching</div>
+          <div class="inc-row"><div class="inc-dot dot-purple"></div>8 in-person and virtual sessions per month — structured around your goals</div>
+          <div class="inc-row"><div class="inc-dot dot-purple"></div>2 dedicated bodywork sessions per month — energy work, marma, Thai massage, soft tissue release</div>
+          <div class="inc-row"><div class="inc-dot dot-purple"></div>Somatic and emotional integration work</div>
+          <div class="inc-row"><div class="inc-dot dot-purple"></div>Nutrition and lifestyle guidance tailored to your life</div>
+          <div class="inc-row"><div class="inc-dot dot-purple"></div>WhatsApp support throughout</div>
+        </div>
+        <div class="strip" style="margin-bottom:0">
+          <div class="strip-icon">🔒</div>
+          <div class="strip-text"><strong>Limited availability.</strong> I work with a small number of people at any time. If there are no spots, you'll be added to the waitlist.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORKSHOPS -->
+    <div class="offer-card">
+      <div class="offer-head" onclick="toggleProg(this)">
+        <div class="offer-icon icon-soft">🎖️</div>
+        <div class="offer-head-text">
+          <div class="offer-title">Workshops &amp; Institutions</div>
+          <div class="offer-price-main" style="color:var(--mid);font-size:15px">On enquiry</div>
+          <div class="offer-price-sub">Groups · corporates · tactical and paramilitary units</div>
+        </div>
+        <div class="offer-chevron">&#8964;</div>
+      </div>
+      <div class="offer-body-toggle">
+        <div class="offer-desc">
+          13+ years of training people across movement, strength, bodywork, and somatic practice — including India's elite units NSG, ITBP, Para 17, and Haryana Police SWAT. Whether it's a corporate wellness workshop, a multi-day movement immersive, or a tactical S&amp;C programme — each engagement is designed specifically for the group.
+        </div>
+        <div class="inc-label">Available formats</div>
+        <div class="inc-grid">
+          <div class="inc-row"><div class="inc-dot dot-soft"></div>Half-day and full-day workshops — movement, bodywork, somatic practice</div>
+          <div class="inc-row"><div class="inc-dot dot-soft"></div>Strength and conditioning for tactical and paramilitary units</div>
+          <div class="inc-row"><div class="inc-dot dot-soft"></div>Corporate wellness programmes</div>
+          <div class="inc-row"><div class="inc-dot dot-soft"></div>1-on-1 coaching and mentorship for practitioners</div>
+        </div>
       </div>
     </div>
 
@@ -457,7 +517,7 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);-webk
 
     <div class="strip" style="margin-top:32px">
       <div class="strip-icon">✦</div>
-      <div class="strip-text" style="font-style:italic;font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--mid)">"If you're not ready yet — that's okay. The door is open when you are."</div>
+      <div class="strip-text" style="font-style:italic;font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--mid);line-height:1.5">"If you're not ready yet — that's okay. The door is open when you are."</div>
     </div>
 
   </div>
@@ -494,6 +554,18 @@ function togglePhase(header) {
 }
 // Open first phase by default
 document.querySelector('.phase-head').click();
+
+function toggleProg(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.offer-chevron');
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.offer-body-toggle').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.offer-chevron').forEach(c => c.classList.remove('open'));
+  if (!isOpen) {
+    body.classList.add('open');
+    chevron.classList.add('open');
+  }
+}
 </script>
 
 </body>
